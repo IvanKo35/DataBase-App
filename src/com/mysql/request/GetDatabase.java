@@ -1,4 +1,4 @@
-package com.mysql.connection.request;
+package com.mysql.request;
 
 
 import com.mysql.connection.MysqlServerConnect;

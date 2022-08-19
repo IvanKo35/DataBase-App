@@ -6,8 +6,12 @@ import java.awt.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.sql.ResultSet;
-import com.templates.DatabaseListModel;
 import java.sql.SQLException;
+import java.util.Objects;
+
+import com.mysql.connection.MysqlServerConnect;
+import com.mysql.request.GetDatabase;
+import com.templates.DatabaseListModel;
 
 public class Window {
     public JFrame jFrame;
@@ -27,7 +31,7 @@ public class Window {
         jFrame.getContentPane().setLayout(null);
         jFrame.setLocation(500,300);
 
-        dBase = com.mysql.connection.request.GetDatabase.getBase();
+        dBase = GetDatabase.getBase();
         DatabaseListModel dBase_name = new DatabaseListModel(dBase, 1);
         DatabaseListModel dBase_age = new DatabaseListModel(dBase, 2);
 
@@ -57,16 +61,24 @@ public class Window {
 
         var refreshAction = new RefreshAction();
         JButton refresh = new JButton(refreshAction);
-        refresh.setBounds(145,58,30,30);
+        String icon_refresh = Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("com/gui/icons/icon_refresh.png")).getFile();
+        refresh.setIcon(new ImageIcon(icon_refresh));
+        refresh.setContentAreaFilled(false);
+        refresh.setBounds(145,60,30,30);
         jFrame.getContentPane().add(refresh);
 
         var addAction = new AddAction();
-        JButton addButton = new JButton((Icon) addAction);
-        refresh.setBounds(145,98,30,30);
-
+        JButton addButton = new JButton(addAction);
+        String icon_add = Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("com/gui/icons/icon_add.png")).getFile();
+        addButton.setIcon(new ImageIcon(icon_add));
+        addButton.setContentAreaFilled(false);
+        addButton.setBounds(180,60,30,30);
+        jFrame.getContentPane().add(addButton);
 
         datalist.addListSelectionListener(arg -> {
-             String NAME = datalist.getSelectedValue().toString();
+             String NAME = datalist.getSelectedValue();
              String AGE = dBase_age.getElementAt(dBase_name.indexOf(NAME));
              name.setText(NAME);
              age.setText(AGE);
@@ -76,7 +88,7 @@ public class Window {
             public void windowOpened(WindowEvent e) {}
             public void windowClosing(WindowEvent e) {
                 try {
-                    com.mysql.connection.MysqlServerConnect.disconnectFromServer();
+                    MysqlServerConnect.disconnectFromServer();
                 } catch (SQLException ex) {
                     throw new RuntimeException(ex);
                 }

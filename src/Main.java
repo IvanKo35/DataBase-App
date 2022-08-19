@@ -1,10 +1,11 @@
 import com.gui.Window;
+import com.mysql.connection.MysqlServerConnect;
 
 import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        com.mysql.connection.MysqlServerConnect.connectToServer();
+        MysqlServerConnect.connectToServer();
         EventQueue.invokeLater(() -> {
             try {
                 com.gui.Window window = new Window();
