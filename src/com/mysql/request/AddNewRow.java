@@ -1,13 +1,19 @@
 package com.mysql.request;
 
 import com.mysql.connection.MysqlServerConnect;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 public class AddNewRow {
-    public static void addRow(String NAME, int AGE) throws SQLException {
+
+    private static PreparedStatement stmt;
+
+    public AddNewRow(String NAME, int AGE) {
         try {
-            int st = MysqlServerConnect.stmt.executeUpdate("INSERT INTO persons.persons VALUES (" + "NAME" +
-                                                                ", " + AGE + ")");
+            stmt = MysqlServerConnect.connection.prepareStatement("INSERT INTO persons VALUE (?, ?)");
+            stmt.setString(1, NAME);
+            stmt.setInt(2, AGE);
+            int rows = stmt.executeUpdate();
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }

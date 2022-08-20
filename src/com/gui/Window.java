@@ -10,15 +10,18 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 import com.mysql.connection.MysqlServerConnect;
+import com.mysql.request.AddNewRow;
 import com.mysql.request.GetDatabase;
 import com.templates.DatabaseListModel;
 
 public class Window {
-    public JFrame jFrame;
-    public  static ResultSet dBase;
+    public static JFrame jFrame;
+    public static ResultSet dBase;
     public static DatabaseListModel dBase_name;
     public static DatabaseListModel dBase_age;
     public static JList<String> datalist = new JList<>();
+    public static JTextField textFieldName;
+    public static JTextField textFieldAge;
 
     public Window() throws SQLException {
         initialize();
@@ -60,13 +63,13 @@ public class Window {
         jFrame.getContentPane().add(age);
 
         var refreshAction = new RefreshAction();
-        JButton refresh = new JButton(refreshAction);
+        JButton refreshButton = new JButton(refreshAction);
         String icon_refresh = Objects.requireNonNull(
                 this.getClass().getClassLoader().getResource("com/gui/icons/icon_refresh.png")).getFile();
-        refresh.setIcon(new ImageIcon(icon_refresh));
-        refresh.setContentAreaFilled(false);
-        refresh.setBounds(145,60,30,30);
-        jFrame.getContentPane().add(refresh);
+        refreshButton.setIcon(new ImageIcon(icon_refresh));
+        refreshButton.setContentAreaFilled(false);
+        refreshButton.setBounds(145,60,30,30);
+        jFrame.getContentPane().add(refreshButton);
 
         var addAction = new AddAction();
         JButton addButton = new JButton(addAction);
@@ -76,6 +79,13 @@ public class Window {
         addButton.setContentAreaFilled(false);
         addButton.setBounds(180,60,30,30);
         jFrame.getContentPane().add(addButton);
+
+        textFieldName = new JTextField("", 20);
+        textFieldAge = new JTextField("", 20);
+        textFieldName.setBounds(145,100,140,25);
+        textFieldAge.setBounds(145,135,140,25);
+        jFrame.getContentPane().add(textFieldName);
+        jFrame.getContentPane().add(textFieldAge);
 
         datalist.addListSelectionListener(arg -> {
              String NAME = datalist.getSelectedValue();
@@ -100,5 +110,10 @@ public class Window {
             public void windowActivated(WindowEvent e) {}
             public void windowDeactivated(WindowEvent e) {}
         });
+    }
+    public static void getRow() throws SQLException {
+        String NAME = textFieldName.getText();
+        int AGE = Integer.parseInt(textFieldAge.getText());
+        new AddNewRow(NAME, AGE);
     }
 }

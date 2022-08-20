@@ -8,15 +8,15 @@ public class MysqlServerConnect {
     private static final String pswd = "password";
 
     //opening and managing connection
-    private static Connection connection;
+    public static Connection connection;
     public static Statement stmt;
 
-    public static void connectToServer() {
+    public static void connectToServer() throws SQLException {
+        connection = DriverManager.getConnection(url, user, pswd);
         try {
             //try of connection
-            connection = DriverManager.getConnection(url, user, pswd);
             stmt = connection.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
-                    ResultSet.CONCUR_READ_ONLY);
+                                                ResultSet.CONCUR_READ_ONLY);
         } catch (Exception ex) {
             System.err.println( ex.getClass().getName() + ": " + ex.getMessage() );
             System.exit(0);
