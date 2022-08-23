@@ -15,13 +15,13 @@ public class RefreshAction extends AbstractAction  {
         putValue(Action.SHORT_DESCRIPTION, "Refresh list");
     }
 
-    public void refreshTable() {
+    public static void refreshTable() {
         ResultSet newResult;
         try {
             newResult = GetDatabase.getBase();
             DatabaseListModel newdBase_name = new DatabaseListModel(newResult, 1);
             DatabaseListModel newdBase_age = new DatabaseListModel(newResult, 2);
-            Window.datalist.setModel(newdBase_name);
+            Window.dBase_name = newdBase_name;
             Window.dBase_age = newdBase_age;
         } catch (SQLException e) {
             throw new RuntimeException(e);

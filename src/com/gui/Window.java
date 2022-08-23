@@ -11,6 +11,7 @@ import java.util.Objects;
 
 import com.mysql.connection.MysqlServerConnect;
 import com.mysql.request.AddNewRow;
+import com.mysql.request.DeleteRow;
 import com.mysql.request.GetDatabase;
 import com.templates.DatabaseListModel;
 
@@ -24,10 +25,6 @@ public class Window {
     public static JTextField textFieldAge;
 
     public Window() throws SQLException {
-        initialize();
-    }
-
-    private void initialize() throws SQLException {
         jFrame = new JFrame();
         jFrame.setBounds(100,100,450,300);
         jFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -80,6 +77,15 @@ public class Window {
         addButton.setBounds(180,60,30,30);
         jFrame.getContentPane().add(addButton);
 
+        var deleteAction = new DeleteAction();
+        JButton deleteButton = new JButton(deleteAction);
+        String icon_delete = Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("com/gui/icons/icon_minus.png")).getFile();
+        deleteButton.setIcon(new ImageIcon(icon_delete));
+        deleteButton.setContentAreaFilled(false);
+        deleteButton.setBounds(215,60,30,30);
+        jFrame.getContentPane().add(deleteButton);
+
         textFieldName = new JTextField("", 20);
         textFieldAge = new JTextField("", 20);
         textFieldName.setBounds(145,100,140,25);
@@ -89,9 +95,11 @@ public class Window {
 
         datalist.addListSelectionListener(arg -> {
              String NAME = datalist.getSelectedValue();
-             String AGE = dBase_age.getElementAt(dBase_name.indexOf(NAME));
+             int idx = datalist.getSelectedIndex();
+             String AGE = dBase_age.getElementAt(idx);
              name.setText(NAME);
              age.setText(AGE);
+             DeleteRow.getRow(NAME, Integer.parseInt(AGE));
         });
 
         jFrame.addWindowListener(new WindowListener() {
@@ -112,8 +120,8 @@ public class Window {
         });
     }
     public static void getRow() throws SQLException {
-        String NAME = textFieldName.getText();
-        int AGE = Integer.parseInt(textFieldAge.getText());
-        new AddNewRow(NAME, AGE);
+        String textFieldNAME = textFieldName.getText();
+        int textFieldAGE = Integer.parseInt(textFieldAge.getText());
+        new AddNewRow(textFieldNAME, textFieldAGE);
     }
 }

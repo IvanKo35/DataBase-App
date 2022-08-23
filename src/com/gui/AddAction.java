@@ -11,7 +11,10 @@ public class AddAction extends AbstractAction {
     @Override
     public void actionPerformed(ActionEvent e) {
         try {
-            Window.getRow();
+            Window.getRow(); //get name and age from text field and add to db
+            Window.textFieldName.setText("");
+            Window.textFieldAge.setText("");
+
         } catch (SQLException ex) {
             throw new RuntimeException(ex);
         }
