@@ -32,8 +32,8 @@ public class Window {
         jFrame.setLocation(500,300);
 
         dBase = GetDatabase.getBase();
-        DatabaseListModel dBase_name = new DatabaseListModel(dBase, 1);
-        DatabaseListModel dBase_age = new DatabaseListModel(dBase, 2);
+        dBase_name = new DatabaseListModel(dBase, 1);
+        dBase_age = new DatabaseListModel(dBase, 2);
 
         datalist.setModel(dBase_name);
         datalist.setBounds(20, 10, 82, 242);
@@ -94,12 +94,12 @@ public class Window {
         jFrame.getContentPane().add(textFieldAge);
 
         datalist.addListSelectionListener(arg -> {
-             String NAME = datalist.getSelectedValue();
              int idx = datalist.getSelectedIndex();
-             String AGE = dBase_age.getElementAt(idx);
+             String NAME = dBase_name.getElementAt(idx);
+             int AGE = Integer.parseInt(dBase_age.getElementAt(idx));
              name.setText(NAME);
-             age.setText(AGE);
-             DeleteRow.getRow(NAME, Integer.parseInt(AGE));
+             age.setText(String.valueOf(AGE));
+             DeleteRow.getRow(NAME, AGE);
         });
 
         jFrame.addWindowListener(new WindowListener() {
@@ -119,6 +119,7 @@ public class Window {
             public void windowDeactivated(WindowEvent e) {}
         });
     }
+
     public static void getRow() throws SQLException {
         String textFieldNAME = textFieldName.getText();
         int textFieldAGE = Integer.parseInt(textFieldAge.getText());

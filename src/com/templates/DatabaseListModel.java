@@ -5,21 +5,21 @@ import java.sql.ResultSet;
 import java.util.Vector;
 
 public class DatabaseListModel extends AbstractListModel<String> {
-    private Vector<String> data = new Vector<>();
+    private final Vector<String> data = new Vector<>();
 
     public DatabaseListModel(ResultSet rs, int column) {
         setDataSource(rs, column);
     }
 
-    public void setDataSource(ResultSet rs, int column)
-    {
+    public void setDataSource(ResultSet rs, int column) {
         try {
             // collection clearing
             data.clear();
             // Search query
             while ( rs.next() ) {
                 // Adding rows into array
-                data.add(rs.getString(column));
+                String element = rs.getString(column);
+                data.add(element);
                 // Notifying views about the addition
                 fireIntervalAdded(this, 0, data.size());
             }
@@ -43,4 +43,27 @@ public class DatabaseListModel extends AbstractListModel<String> {
     public String getElementAt(int idx) { return data.get(idx); }
     //Get index of array's element
     public int indexOf(String element) { return data.indexOf(element); }
+
+    public boolean removeElement(String element) {
+        int index = indexOf(element);
+        boolean rv = data.removeElement(element);
+        if (index >= 0) {
+            fireIntervalRemoved(this, index, index);
+        }
+        return rv;
+    }
+
+    public void remove(int index) {
+        String rv = data.elementAt(index);
+        data.removeElementAt(index);
+        fireIntervalRemoved(this, index, index);
+    }
+
+    public void removeAllElements() {
+        int index1 = data.size()-1;
+        data.removeAllElements();
+        if (index1 >= 0) {
+            fireIntervalRemoved(this, 0, index1);
+        }
+    }
 }
