@@ -1,10 +1,11 @@
-package com.gui;
+package com.gui.ButtonAction;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.gui.Window;
 import com.mysql.request.GetDatabase;
 import com.templates.DatabaseListModel;
 

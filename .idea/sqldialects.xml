@@ -4,5 +4,6 @@
     <file url="file://$PROJECT_DIR$/src/com/mysql/request/AddNewRow.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/com/mysql/request/DeleteRow.java" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/com/mysql/request/GetDatabase.java" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/com/mysql/request/UpdateRow.java" dialect="MySQL" />
   </component>
 </project>

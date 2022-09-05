@@ -9,20 +9,26 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Objects;
 
+import com.gui.ButtonAction.*;
 import com.mysql.connection.MysqlServerConnect;
-import com.mysql.request.AddNewRow;
 import com.mysql.request.DeleteRow;
 import com.mysql.request.GetDatabase;
 import com.templates.DatabaseListModel;
+import com.templates.Row;
 
 public class Window {
+
     public static JFrame jFrame;
     public static ResultSet dBase;
+    public static JList<String> datalist = new JList<>();
     public static DatabaseListModel dBase_name;
     public static DatabaseListModel dBase_age;
-    public static JList<String> datalist = new JList<>();
     public static JTextField textFieldName;
     public static JTextField textFieldAge;
+    public static Label name;
+    public static Label age;
+    public static JButton completeAddButton;
+    public static JButton completeUpdateButton;
 
     public Window() throws SQLException {
         jFrame = new JFrame();
@@ -47,7 +53,7 @@ public class Window {
         label.setBounds(145, 10, 33, 22);
         jFrame.getContentPane().add(label);
 
-        final Label name = new Label("");
+        name = new Label("");
         name.setBounds(221, 10, 62, 22);
         jFrame.getContentPane().add(name);
 
@@ -55,7 +61,7 @@ public class Window {
         label_1.setBounds(145, 38, 53, 22);
         jFrame.getContentPane().add(label_1);
 
-        Label age = new Label("");
+        age = new Label("");
         age.setBounds(231, 38, 37, 22);
         jFrame.getContentPane().add(age);
 
@@ -77,6 +83,7 @@ public class Window {
         addButton.setBounds(180,60,30,30);
         jFrame.getContentPane().add(addButton);
 
+
         var deleteAction = new DeleteAction();
         JButton deleteButton = new JButton(deleteAction);
         String icon_delete = Objects.requireNonNull(
@@ -86,20 +93,56 @@ public class Window {
         deleteButton.setBounds(215,60,30,30);
         jFrame.getContentPane().add(deleteButton);
 
+        var updateAction = new UpdateAction();
+        JButton updateButton = new JButton(updateAction);
+        String icon_update = Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("com/gui/icons/icon_update.png")).getFile();
+        updateButton.setIcon(new ImageIcon(icon_update));
+        updateButton.setContentAreaFilled(false);
+        updateButton.setBounds(250,60,30,30);
+        jFrame.getContentPane().add(updateButton);
+
+        var completeAddAction = new CompleteAddAction();
+        completeAddButton = new JButton(completeAddAction);
+        String icon_complete = Objects.requireNonNull(
+                this.getClass().getClassLoader().getResource("com/gui/icons/icon_complete.png")).getFile();
+        completeAddButton.setIcon(new ImageIcon(icon_complete));
+        completeAddButton.setContentAreaFilled(false);
+        completeAddButton.setBounds(290,117,30,30);
+        jFrame.getContentPane().add(completeAddButton);
+        completeAddButton.setVisible(false);
+
+        var completeUpdateAction = new CompleteUpdateAction();
+        completeUpdateButton = new JButton(completeUpdateAction);
+        completeUpdateButton.setIcon(new ImageIcon(icon_complete));
+        completeUpdateButton.setContentAreaFilled(false);
+        completeUpdateButton.setBounds(290,117,30,30);
+        jFrame.getContentPane().add(completeUpdateButton);
+        completeUpdateButton.setVisible(false);
+
         textFieldName = new JTextField("", 20);
         textFieldAge = new JTextField("", 20);
         textFieldName.setBounds(145,100,140,25);
         textFieldAge.setBounds(145,135,140,25);
         jFrame.getContentPane().add(textFieldName);
         jFrame.getContentPane().add(textFieldAge);
+        textFieldName.setVisible(false);
+        textFieldAge.setVisible(false);
 
         datalist.addListSelectionListener(arg -> {
-             int idx = datalist.getSelectedIndex();
-             String NAME = dBase_name.getElementAt(idx);
-             int AGE = Integer.parseInt(dBase_age.getElementAt(idx));
-             name.setText(NAME);
-             age.setText(String.valueOf(AGE));
-             DeleteRow.getRow(NAME, AGE);
+            int idx = datalist.getSelectedIndex();
+            if (idx == -1) {
+                datalist.clearSelection();
+            }
+            else {
+                String NAME = dBase_name.getElementAt(idx);
+                String AGE = dBase_age.getElementAt(idx);
+
+                name.setText(NAME);
+                age.setText(AGE);
+                DeleteRow.getRow(NAME, AGE);
+                UpdateAction.setRowFirst(new Row(NAME, Integer.parseInt(AGE)));
+            }
         });
 
         jFrame.addWindowListener(new WindowListener() {
@@ -120,9 +163,9 @@ public class Window {
         });
     }
 
-    public static void getRow() throws SQLException {
+    public static Row getRow() {
         String textFieldNAME = textFieldName.getText();
         int textFieldAGE = Integer.parseInt(textFieldAge.getText());
-        new AddNewRow(textFieldNAME, textFieldAGE);
+        return new Row(textFieldNAME, textFieldAGE);
     }
 }

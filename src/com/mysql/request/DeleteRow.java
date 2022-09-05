@@ -5,7 +5,6 @@ import com.mysql.connection.MysqlServerConnect;
 
 import javax.swing.*;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class DeleteRow {
@@ -24,10 +23,13 @@ public class DeleteRow {
                 stmt.setInt(2, AGE);
                 int rows = stmt.executeUpdate();
 
-                int idx = Window.dBase_name.indexOf(NAME);
-                Window.dBase_name.remove(idx);
-                Window.dBase_age.remove(idx);
+                Window.datalist.ensureIndexIsVisible(Window.dBase_name.getSize());
+                int idx = Window.datalist.getSelectedIndex();
+                Window.dBase_name.remove(idx);Window.dBase_age.remove(idx);
                 Window.datalist.setModel(Window.dBase_name);
+
+                Window.name.setText("");
+                Window.age.setText("");
 
             } catch (SQLException ex) {
                 throw new RuntimeException(ex);
@@ -35,9 +37,9 @@ public class DeleteRow {
         }
     }
 
-    public static void getRow(String name, int age) {
+    public static void getRow(String name, String age) {
         NAME = name;
-        AGE = age;
+        AGE = Integer.parseInt(age);
     }
 
 }

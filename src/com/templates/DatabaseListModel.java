@@ -37,6 +37,11 @@ public class DatabaseListModel extends AbstractListModel<String> {
         fireIntervalAdded(this, index, index);
     }
 
+    public void InsertElementAt(String element, int index) {
+        data.insertElementAt(element, index);
+        fireContentsChanged(this, index, index);
+    }
+
     // Get size of array
     public int getSize() { return data.size(); }
     // Get element from array
@@ -57,13 +62,5 @@ public class DatabaseListModel extends AbstractListModel<String> {
         String rv = data.elementAt(index);
         data.removeElementAt(index);
         fireIntervalRemoved(this, index, index);
-    }
-
-    public void removeAllElements() {
-        int index1 = data.size()-1;
-        data.removeAllElements();
-        if (index1 >= 0) {
-            fireIntervalRemoved(this, 0, index1);
-        }
     }
 }
